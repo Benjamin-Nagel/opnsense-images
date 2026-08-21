@@ -135,21 +135,30 @@ jobs:
 
       - name: Verify generated QCOW2
         run: |
-          test -f output/opnsense.qcow2
+          test -f output/opnsense-${PKR_VAR_VERSION}.qcow2
           test -f apikey.txt
 
-          qemu-img info output/opnsense.qcow2
+          qemu-img info output/opnsense-${PKR_VAR_VERSION}.qcow2
+
+      - name: Prepare release image
+        run: |
+          cp \
+            "output/opnsense-${PKR_VAR_VERSION}.qcow2" \
+            "output/opnsense.qcow2"
 
       - name: Calculate QCOW2 SHA1
         run: |
-          sha1sum \
-            output/opnsense.qcow2 \
-            > output/opnsense.qcow2.sha1sum
+          (
+            cd output
+            sha1sum opnsense.qcow2 > opnsense.qcow2.sha1sum
+          )
 
       - name: Verify QCOW2 SHA1
         run: |
-          sha1sum --check \
-            output/opnsense.qcow2.sha1sum
+          (
+            cd output
+            sha1sum --check opnsense.qcow2.sha1sum
+          )
 
       - name: Prepare release artifact
         run: |
