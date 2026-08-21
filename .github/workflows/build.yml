@@ -103,6 +103,36 @@ jobs:
         run: |
           packer build .
 
+      - name: Verify generated image
+        run: |
+          echo "=== Workspace ==="
+          pwd
+
+          echo
+          echo "=== Files ==="
+          find . -maxdepth 3 -type f -print | sort
+
+          echo
+          echo "=== Output directory ==="
+          if [ -d output ]; then
+            ls -lah output
+          else
+            echo "output directory does not exist"
+          fi
+
+          echo
+          echo "=== API key ==="
+          if [ -f apikey.txt ]; then
+            echo "apikey.txt exists"
+            ls -l apikey.txt
+          else
+            echo "apikey.txt does not exist"
+          fi
+
+          echo
+          echo "=== QCOW2 candidates ==="
+          find . -type f \( -name '*.qcow2' -o -name '*apikey*' \) -print
+
       - name: Verify generated QCOW2
         run: |
           test -f output/opnsense.qcow2

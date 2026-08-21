@@ -29,7 +29,7 @@ source "qemu" "opnsense" {
     ["opnsense-installer<enter><wait2s>", "Run OPNsense Installer"],
     ["<enter><wait2s>", "Use default keymap"],
     ["<down><enter><wait2s><enter><wait3s>", "Use UFS"],
-    ["<enter><wait2s><left><enter><wait20m>", "Select the disk and install OPNsense"],
+    ["<enter><wait2s><left><enter><wait10m>", "Select the disk and install OPNsense"],
     ["opnsense<enter><wait1s>opnsense<enter><wait3s>", "Reset the opnsense password"],
     ["<down><enter><wait2s><enter><wait2m>", "Exit installer and wait 2min for guest to start"],
     ["root<enter>opnsense<enter><wait5s>", "Login into the firewall"],
@@ -60,9 +60,6 @@ source "qemu" "opnsense" {
   # Setting headless to false open the libvirt gui to actually see
   # the installer is doing
   headless = true
-  vnc_bind_address = "0.0.0.0"
-  vnc_port_min      = 5900
-  vnc_port_max      = 5900
 
   qemuargs = [
     ["-chardev", "socket,path=${var.SOCKET_DIR}/qemu-isa-serial.sock,server=on,wait=off,id=qga0"],
