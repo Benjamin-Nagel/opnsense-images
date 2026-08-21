@@ -12,7 +12,7 @@ source "qemu" "opnsense" {
   boot_steps = [
     ["1", "Boot in multi user mod"],
     ["<wait5m>", "Waiting 5min for guest to start"],
-    ["root<enter>opnsense<enter><wait3s>", "Login into the firewall"],
+    ["root<enter><wait1s>opnsense<enter><wait3s>", "Login into the firewall"],
     ["1<enter><wait2s>", "Start manual interface assignment"],
     ["N<enter><wait2s>", "Do not configure LAGGs now"],
     ["N<enter><wait2s>", "Do not configure VLANs now"],
@@ -29,10 +29,12 @@ source "qemu" "opnsense" {
     ["opnsense-installer<enter><wait2s>", "Run OPNsense Installer"],
     ["<enter><wait2s>", "Use default keymap"],
     ["<down><enter><wait2s><enter><wait3s>", "Use UFS"],
-    ["<enter><wait2s><left><enter><wait10m>", "Select the disk and install OPNsense"],
-    ["<down><enter><wait2s><enter><wait5m>", "Exit installer and wait 2min for guest to start"],
+    ["<enter><wait2s><left><enter><wait20m>", "Select the disk and install OPNsense"],
+    ["opnsense<enter><wait1s>opnsense<enter><wait3s>", "Reset the opnsense password"],
+    ["<down><enter><wait2s><enter><wait2m>", "Exit installer and wait 2min for guest to start"],
     ["root<enter>opnsense<enter><wait5s>", "Login into the firewall"],
-    ["8<enter><wait2s>pfctl -d<enter><wait2s>", "Disabling firewall"],
+    ["8<enter><wait2s>pkg install -y os-qemu-guest-agent<enter><wait15s>sysrc qemu_guest_agent_enable='YES'<enter><wait1s>", "Install and enable Qemu Guest package"],
+    ["pfctl -d<enter><wait2s>", "Disabling firewall"],
   ]
   shutdown_command = "shutdown -p now<enter>"
 
@@ -58,6 +60,9 @@ source "qemu" "opnsense" {
   # Setting headless to false open the libvirt gui to actually see
   # the installer is doing
   headless = true
+  vnc_bind_address = "0.0.0.0"
+  vnc_port_min      = 5900
+  vnc_port_max      = 5900
 
   qemuargs = [
     ["-chardev", "socket,path=${var.SOCKET_DIR}/qemu-isa-serial.sock,server=on,wait=off,id=qga0"],
