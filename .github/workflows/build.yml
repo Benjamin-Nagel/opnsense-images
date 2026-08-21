@@ -83,8 +83,11 @@ jobs:
         run: |
           ISO_NAME="OPNsense-${PKR_VAR_VERSION}-dvd-amd64.iso"
 
-          sha1sum --check \
-            "iso/${ISO_NAME}.sha1"
+          (
+            cd iso
+            sha1sum --check \
+              "${ISO_NAME}.sha1"
+          )
 
       - name: Initialize Packer
         run: |
