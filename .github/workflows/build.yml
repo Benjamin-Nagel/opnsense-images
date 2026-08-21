@@ -6,6 +6,8 @@ on:
       - main
 
   push:
+    branches:
+      - "feature/DEPLOYMENT_26.7"
     tags:
       - "v*"
 
